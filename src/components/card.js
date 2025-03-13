@@ -1,11 +1,5 @@
-const templateContent = document.querySelector('#card-template').content;
-const placesList = document.querySelector('.places__list');
-
-initialCards.forEach(card => {
-  placesList.append(createCard(card, removeCard))
-});
-
-function createCard(cardData = {}, removeCard) {
+export function createCard(cardData = {}, removeCard) {
+  const templateContent = document.querySelector('#card-template').content;
   const card = templateContent.querySelector('.card').cloneNode(true);
   const cardImg = card.querySelector('.card__image');
   const cardTitle = card.querySelector('.card__title');
@@ -19,7 +13,7 @@ function createCard(cardData = {}, removeCard) {
   return card;
 }
 
-function removeCard(card) {
+export function removeCard(card) {
   if (!card) return;
   card.remove();
 }

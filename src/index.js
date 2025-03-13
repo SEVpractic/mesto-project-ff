@@ -1,29 +1,27 @@
 import './pages/index.css'
 
-import { initialCards } from './scripts/cards'
+import { initialCards } from './components/initialCards'
+import * as card from './components/card'
+import * as modal from './components/modal'
 
-const templateContent = document.querySelector('#card-template').content;
 const placesList = document.querySelector('.places__list');
+const profileEditPopup = document.querySelector('.popup_type_edit');
+const profileEditBtn = document.querySelector('.profile__edit-button');
+const addCardBtn = document.querySelector('.profile__add-button');
+const addCardPopup = document.querySelector('.popup_type_new-card');
+const cardImages = document.querySelectorAll('.card__image');
+const cardImagePopup = document.querySelector('.popup_type_image');
 
-initialCards.forEach(card => {
-  placesList.append(createCard(card, removeCard))
+
+
+initialCards.forEach(el => {
+  placesList.append(card.createCard(el, card.removeCard))
 });
 
-function createCard(cardData = {}, removeCard) {
-  const card = templateContent.querySelector('.card').cloneNode(true);
-  const cardImg = card.querySelector('.card__image');
-  const cardTitle = card.querySelector('.card__title');
-  const cardRemoveBtn = card.querySelector('.card__delete-button');
+profileEditBtn.addEventListener('click', () => modal.openModal(profileEditPopup));
 
-  cardImg.src = cardData.link ? cardData.link : '';
-  cardTitle.textContent = cardData.name ? cardData.name : '';
+addCardBtn.addEventListener('click', () => modal.openModal(addCardPopup));
 
-  cardRemoveBtn.addEventListener('click', () => removeCard(card));
-
-  return card;
-}
-
-function removeCard(card) {
-  if (!card) return;
-  card.remove();
-}
+// cardImages.forEach(cardImage => {
+//   cardImage.addEventListener('click',() => modal.openModal(cardImagePopup));
+// });
