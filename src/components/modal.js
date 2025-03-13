@@ -14,6 +14,9 @@ export function closeModal(popup) {
   popup.querySelector('.popup__close').removeEventListener('click', e => closeModal(popup));
   popup.removeEventListener('click', e => closeModalByOverlay);
   document.removeEventListener('keydown', e => closeModalByEscape);
+
+  const form = popup.querySelector('.popup__form');
+  if (form) form.reset();
 }
 
 function closeModalByOverlay(e) {
