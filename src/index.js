@@ -1,5 +1,3 @@
-export { cardImgPopup };
-
 import "./pages/index.css";
 
 import { initialCards } from "./components/initialCards";
@@ -24,23 +22,25 @@ const profileEditBtn = document.querySelector(".profile__edit-button");
 
 const addCardBtn = document.querySelector(".profile__add-button");
 const addCardPopup = document.querySelector(".popup_type_new-card");
-const cardImgPopup = document.querySelector(".popup_type_image");
 const cardCreateForm = document.querySelector('.popup__form[name="new-place"]');
 const cardNameInput = cardCreateForm.querySelector(
   ".popup__input_type_card-name"
 );
 const cardUrlInput = cardCreateForm.querySelector(".popup__input_type_url");
+const cardImgPopup = document.querySelector(".popup_type_image");
+const cardImgPopupImage = cardImgPopup.querySelector(".popup__image");
+const cardImgPopupCaption = cardImgPopup.querySelector(".popup__caption");
 
 initialCards.forEach((el) => {
   placesList.append(
-    card.createCard(el, card.removeCard, card.setLike, card.showImg)
+    card.createCard(el, card.removeCard, card.setLike, showImg)
   );
 });
 
 profileEditBtn.addEventListener("click", profileOpenHandler);
 profileEditForm.addEventListener("submit", profileEditHandler);
 
-addCardBtn.addEventListener("click", () => modal.openModal(addCardPopup));
+addCardBtn.addEventListener("click", createCardOpenHandler);
 cardCreateForm.addEventListener("submit", createCardHandler);
 
 function profileOpenHandler() {
@@ -59,6 +59,11 @@ function profileEditHandler(e) {
   modal.closeModal(profileEditPopup);
 }
 
+function createCardOpenHandler(e) {
+  cardCreateForm.reset();
+  modal.openModal(addCardPopup);
+}
+
 function createCardHandler(e) {
   e.preventDefault();
 
@@ -67,8 +72,19 @@ function createCardHandler(e) {
     link: cardUrlInput.value,
   };
   placesList.prepend(
-    card.createCard(content, card.removeCard, card.setLike, card.showImg)
+    card.createCard(content, card.removeCard, card.setLike, showImg)
   );
 
   modal.closeModal(addCardPopup);
+}
+
+function showImg(cardImg, cardTitle) {
+  cardImg.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    cardImgPopupImage.src = cardImg.src;
+    cardImgPopupCaption.textContent = cardTitle.textContent;
+
+    modal.openModal(cardImgPopup);
+  });
 }
