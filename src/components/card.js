@@ -1,5 +1,3 @@
-import * as modal from "./modal";
-
 export function createCard(cardData = {}, removeCard, setLike, showImg) {
   const templateContent = document.querySelector("#card-template").content;
   const card = templateContent.querySelector(".card").cloneNode(true);

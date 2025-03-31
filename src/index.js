@@ -3,6 +3,7 @@ import "./pages/index.css";
 import { initialCards } from "./components/initialCards";
 import * as card from "./components/card";
 import * as modal from "./components/modal";
+import * as validation from "./components/validation";
 
 const placesList = document.querySelector(".places__list");
 
@@ -31,6 +32,15 @@ const cardImgPopup = document.querySelector(".popup_type_image");
 const cardImgPopupImage = cardImgPopup.querySelector(".popup__image");
 const cardImgPopupCaption = cardImgPopup.querySelector(".popup__caption");
 
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_error',
+  errorClass: 'popup__input-error_visible'
+};
+
 initialCards.forEach((el) => {
   placesList.append(
     card.createCard(el, card.removeCard, card.setLike, showImg)
@@ -43,10 +53,14 @@ profileEditForm.addEventListener("submit", profileEditHandler);
 addCardBtn.addEventListener("click", createCardOpenHandler);
 cardCreateForm.addEventListener("submit", createCardHandler);
 
+validation.enableValidation(validationConfig);
+
 function profileOpenHandler() {
+  profileEditForm.reset();
   profileNameInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
 
+  validation.clearValidation(profileEditForm, validationConfig);
   modal.openModal(profileEditPopup);
 }
 
@@ -61,6 +75,8 @@ function profileEditHandler(e) {
 
 function createCardOpenHandler(e) {
   cardCreateForm.reset();
+
+  validation.clearValidation(cardCreateForm, validationConfig);
   modal.openModal(addCardPopup);
 }
 
