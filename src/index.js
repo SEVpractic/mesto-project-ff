@@ -113,7 +113,7 @@ function initPage() {
 
     res[1].forEach((el) => {
       placesList.append(
-        card.createCard(myId, el, removeCard, card.setLike, showImg)
+        card.createCard(myId, el, removeCard, toggleLike, showImg)
       );
     });
   });
@@ -121,4 +121,18 @@ function initPage() {
 
 function removeCard(thisCard, cardId) {
   api.removeCard(cardId).then((res) => card.removeCard(thisCard));
+}
+
+function toggleLike(thisCard, cardData) {
+  if (cardData.likes.some((el) => el._id === myId)) {
+    return api.removeLike(cardData._id).then((res) => {
+      card.setLike(thisCard, res, myId);
+      return res;
+    });
+  } else {
+    return api.addLike(cardData._id).then((res) => {
+      card.setLike(thisCard, res, myId);
+      return res;
+    });
+  }
 }

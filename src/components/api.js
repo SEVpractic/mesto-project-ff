@@ -40,6 +40,22 @@ export function removeCard(cardId) {
   );
 }
 
+export function addLike(cardId) {
+  return tryFetch(
+    `${config.baseUrl}/cards/likes/${cardId}`,
+    'PUT',
+    config.headers
+  );
+}
+
+export function removeLike(cardId) {
+  return tryFetch(
+    `${config.baseUrl}/cards/likes/${cardId}`,
+    'DELETE',
+    config.headers
+  );
+}
+
 function tryFetch(url, method, headers, data) {
   return fetch(url, { method, headers, body: JSON.stringify(data) })
   .then(res => {
