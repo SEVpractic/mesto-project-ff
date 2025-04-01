@@ -41,6 +41,8 @@ const validationConfig = {
   errorClass: "popup__input-error_visible",
 };
 
+let myId;
+
 initPage();
 
 profileEditBtn.addEventListener("click", profileOpenHandler);
@@ -83,15 +85,14 @@ function createCardOpenHandler(e) {
 function createCardHandler(e) {
   e.preventDefault();
 
-  api.createCard(cardNameInput.value, cardUrlInput.value)
-  .then(data => {
+  api.createCard(cardNameInput.value, cardUrlInput.value).then((data) => {
     const content = {
       name: data.name,
       link: data.link,
     };
 
     placesList.prepend(
-      card.createCard(content, card.removeCard, card.setLike, showImg)
+      card.createCard(myId, content, card.removeCard, card.setLike, showImg)
     );
   });
 
@@ -111,13 +112,18 @@ function showImg(cardImg, cardTitle) {
 
 function initPage() {
   Promise.all([api.getUserInfo(), api.getInitialCards()]).then((res) => {
+    myId = res[0]._id;
     profileTitle.textContent = res[0].name;
     profileDescription.textContent = res[0].about;
 
     res[1].forEach((el) => {
       placesList.append(
-        card.createCard(el, card.removeCard, card.setLike, showImg)
+        card.createCard(myId, el, removeCard, card.setLike, showImg)
       );
     });
   });
+}
+
+function removeCard(thisCard, cardId) {
+  api.removeCard(cardId).then((res) => card.removeCard(thisCard));
 }

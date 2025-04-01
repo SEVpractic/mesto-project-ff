@@ -32,6 +32,14 @@ export function createCard(name, link) {
   ); 
 }
 
+export function removeCard(cardId) {
+  return tryFetch(
+    `${config.baseUrl}/cards/${cardId}`,
+    'DELETE',
+    config.headers
+  );
+}
+
 function tryFetch(url, method, headers, data) {
   return fetch(url, { method, headers, body: JSON.stringify(data) })
   .then(res => {
