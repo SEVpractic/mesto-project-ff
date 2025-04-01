@@ -23,6 +23,15 @@ export function setUserInfo(name, about) {
   );
 }
 
+export function createCard(name, link) {
+  return tryFetch(
+    `${config.baseUrl}/cards`,
+    'POST',
+    config.headers,
+    { name, link }
+  ); 
+}
+
 function tryFetch(url, method, headers, data) {
   return fetch(url, { method, headers, body: JSON.stringify(data) })
   .then(res => {

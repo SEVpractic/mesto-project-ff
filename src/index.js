@@ -83,13 +83,17 @@ function createCardOpenHandler(e) {
 function createCardHandler(e) {
   e.preventDefault();
 
-  const content = {
-    name: cardNameInput.value,
-    link: cardUrlInput.value,
-  };
-  placesList.prepend(
-    card.createCard(content, card.removeCard, card.setLike, showImg)
-  );
+  api.createCard(cardNameInput.value, cardUrlInput.value)
+  .then(data => {
+    const content = {
+      name: data.name,
+      link: data.link,
+    };
+
+    placesList.prepend(
+      card.createCard(content, card.removeCard, card.setLike, showImg)
+    );
+  });
 
   modal.closeModal(addCardPopup);
 }
