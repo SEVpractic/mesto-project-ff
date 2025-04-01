@@ -50,7 +50,6 @@ function hideInputError(formElement, inputElement, validationConfig) {
 }
 
 function toggleButtonState(inputList, button, validationConfig) {
-  debugger
   if (hasInvalidInput(inputList)) {
     button.disabled = true;
     button.classList.add(validationConfig.inactiveButtonClass);

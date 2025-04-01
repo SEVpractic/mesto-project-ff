@@ -1,9 +1,9 @@
 import "./pages/index.css";
 
-import { initialCards } from "./components/initialCards";
 import * as card from "./components/card";
 import * as modal from "./components/modal";
 import * as validation from "./components/validation";
+import * as api from "./components/api";
 
 const placesList = document.querySelector(".places__list");
 
@@ -33,19 +33,15 @@ const cardImgPopupImage = cardImgPopup.querySelector(".popup__image");
 const cardImgPopupCaption = cardImgPopup.querySelector(".popup__caption");
 
 const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_error',
-  errorClass: 'popup__input-error_visible'
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_error",
+  errorClass: "popup__input-error_visible",
 };
 
-initialCards.forEach((el) => {
-  placesList.append(
-    card.createCard(el, card.removeCard, card.setLike, showImg)
-  );
-});
+initPage();
 
 profileEditBtn.addEventListener("click", profileOpenHandler);
 profileEditForm.addEventListener("submit", profileEditHandler);
@@ -67,8 +63,12 @@ function profileOpenHandler() {
 function profileEditHandler(e) {
   e.preventDefault();
 
-  profileTitle.textContent = profileNameInput.value;
-  profileDescription.textContent = profileDescriptionInput.value;
+  api
+    .setUserInfo(profileNameInput.value, profileDescriptionInput.value)
+    .then((data) => {
+      profileTitle.textContent = data.name;
+      profileDescription.textContent = data.about;
+    });
 
   modal.closeModal(profileEditPopup);
 }
@@ -102,5 +102,18 @@ function showImg(cardImg, cardTitle) {
     cardImgPopupCaption.textContent = cardTitle.textContent;
 
     modal.openModal(cardImgPopup);
+  });
+}
+
+function initPage() {
+  Promise.all([api.getUserInfo(), api.getInitialCards()]).then((res) => {
+    profileTitle.textContent = res[0].name;
+    profileDescription.textContent = res[0].about;
+
+    res[1].forEach((el) => {
+      placesList.append(
+        card.createCard(el, card.removeCard, card.setLike, showImg)
+      );
+    });
   });
 }
