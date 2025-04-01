@@ -86,13 +86,8 @@ function createCardHandler(e) {
   e.preventDefault();
 
   api.createCard(cardNameInput.value, cardUrlInput.value).then((data) => {
-    const content = {
-      name: data.name,
-      link: data.link,
-    };
-
     placesList.prepend(
-      card.createCard(myId, content, card.removeCard, card.setLike, showImg)
+      card.createCard(myId, data, card.removeCard, card.setLike, showImg)
     );
   });
 
