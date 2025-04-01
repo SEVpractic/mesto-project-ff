@@ -87,7 +87,7 @@ function createCardHandler(e) {
 
   api.createCard(cardNameInput.value, cardUrlInput.value).then((data) => {
     placesList.prepend(
-      card.createCard(myId, data, card.removeCard, card.setLike, showImg)
+      card.createCard(myId, data, removeCard, toggleLike, showImg)
     );
   });
 
