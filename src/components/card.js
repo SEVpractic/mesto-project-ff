@@ -20,8 +20,7 @@ export function createCard(myId, cardData, removeCard, toggleLike, showImg) {
   }
 
   cardLikeBtn.addEventListener("click", () =>
-    toggleLike(card, cardData)
-      .then(res => cardData = res)
+    toggleLike(card, cardData).then((res) => (cardData = res))
   );
   showImg(cardImg, cardTitle);
 

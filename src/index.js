@@ -83,7 +83,7 @@ function profileEditHandler(e) {
       profileTitle.textContent = data.name;
       profileDescription.textContent = data.about;
     })
-    .finally(_=> toggleSubmitButton(profileEditForm, false));
+    .finally((_) => toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(profileEditPopup);
 }
@@ -99,11 +99,14 @@ function createCardHandler(e) {
   e.preventDefault();
   toggleSubmitButton(profileEditForm, true);
 
-  api.createCard(cardNameInput.value, cardUrlInput.value).then((data) => {
-    placesList.prepend(
-      card.createCard(myId, data, removeCard, toggleLike, showImg)
-    );
-  }).finally(_=> toggleSubmitButton(profileEditForm, false));
+  api
+    .createCard(cardNameInput.value, cardUrlInput.value)
+    .then((data) => {
+      placesList.prepend(
+        card.createCard(myId, data, removeCard, toggleLike, showImg)
+      );
+    })
+    .finally((_) => toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(addCardPopup);
 }
@@ -156,7 +159,7 @@ function profileImageHandler(e) {
   profileImageEditForm.reset();
 
   const image = getComputedStyle(profileImage).backgroundImage;
-  profileImageUrlInput.value = image.replace(/url\(["']?(.*?)["']?\)/, '$1');
+  profileImageUrlInput.value = image.replace(/url\(["']?(.*?)["']?\)/, "$1");
 
   validation.clearValidation(profileImageEditForm, validationConfig);
   modal.openModal(profileImageEditPopup);
@@ -166,9 +169,12 @@ function imageEditHandler(e) {
   e.preventDefault();
   toggleSubmitButton(profileEditForm, true);
 
-  api.setProfileImage(profileImageUrlInput.value).then(data => {
-    profileImage.style.backgroundImage = `url('${data.avatar}')`;
-  }).finally(_=> toggleSubmitButton(profileEditForm, false));
+  api
+    .setProfileImage(profileImageUrlInput.value)
+    .then((data) => {
+      profileImage.style.backgroundImage = `url('${data.avatar}')`;
+    })
+    .finally((_) => toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(profileImageEditPopup);
 }

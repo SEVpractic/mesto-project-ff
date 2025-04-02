@@ -1,41 +1,37 @@
 const config = {
-  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-36',
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-36",
   headers: {
-    authorization: '61d5fff1-2f3d-4042-8577-25fe07acbd29',
-    'Content-Type': 'application/json'
-  }
-}
+    authorization: "61d5fff1-2f3d-4042-8577-25fe07acbd29",
+    "Content-Type": "application/json",
+  },
+};
 
 export function getUserInfo() {
-  return tryFetch(`${config.baseUrl}/users/me`, 'GET', config.headers);
+  return tryFetch(`${config.baseUrl}/users/me`, "GET", config.headers);
 }
 
 export function getInitialCards() {
-  return tryFetch(`${config.baseUrl}/cards`, 'GET', config.headers)
+  return tryFetch(`${config.baseUrl}/cards`, "GET", config.headers);
 }
 
 export function setUserInfo(name, about) {
-  return tryFetch(
-    `${config.baseUrl}/users/me`, 
-    'PATCH', 
-    config.headers,
-    { name, about }
-  );
+  return tryFetch(`${config.baseUrl}/users/me`, "PATCH", config.headers, {
+    name,
+    about,
+  });
 }
 
 export function createCard(name, link) {
-  return tryFetch(
-    `${config.baseUrl}/cards`,
-    'POST',
-    config.headers,
-    { name, link }
-  ); 
+  return tryFetch(`${config.baseUrl}/cards`, "POST", config.headers, {
+    name,
+    link,
+  });
 }
 
 export function removeCard(cardId) {
   return tryFetch(
     `${config.baseUrl}/cards/${cardId}`,
-    'DELETE',
+    "DELETE",
     config.headers
   );
 }
@@ -43,7 +39,7 @@ export function removeCard(cardId) {
 export function addLike(cardId) {
   return tryFetch(
     `${config.baseUrl}/cards/likes/${cardId}`,
-    'PUT',
+    "PUT",
     config.headers
   );
 }
@@ -51,15 +47,15 @@ export function addLike(cardId) {
 export function removeLike(cardId) {
   return tryFetch(
     `${config.baseUrl}/cards/likes/${cardId}`,
-    'DELETE',
+    "DELETE",
     config.headers
   );
 }
 
 export function setProfileImage(avatar) {
   return tryFetch(
-    `${config.baseUrl}/users/me/avatar`, 
-    'PATCH', 
+    `${config.baseUrl}/users/me/avatar`,
+    "PATCH",
     config.headers,
     { avatar }
   );
@@ -67,12 +63,13 @@ export function setProfileImage(avatar) {
 
 function tryFetch(url, method, headers, data) {
   return fetch(url, { method, headers, body: JSON.stringify(data) })
-  .then(res => {
-    if (res.ok) { return res.json(); }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-  .catch(err => {
-    console.log(err);
-  });
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
-
