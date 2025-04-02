@@ -2,3 +2,7 @@
   display: block;
   position: relative;
 }
+
+.popup__input-wrapper:first-of-type {
+  margin-block-end: 12px;
+}
