@@ -75,13 +75,15 @@ function profileOpenHandler() {
 
 function profileEditHandler(e) {
   e.preventDefault();
+  toggleSubmitButton(profileEditForm, true);
 
   api
     .setUserInfo(profileNameInput.value, profileDescriptionInput.value)
     .then((data) => {
       profileTitle.textContent = data.name;
       profileDescription.textContent = data.about;
-    });
+    })
+    .finally(_=> toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(profileEditPopup);
 }
@@ -95,12 +97,13 @@ function createCardOpenHandler(e) {
 
 function createCardHandler(e) {
   e.preventDefault();
+  toggleSubmitButton(profileEditForm, true);
 
   api.createCard(cardNameInput.value, cardUrlInput.value).then((data) => {
     placesList.prepend(
       card.createCard(myId, data, removeCard, toggleLike, showImg)
     );
-  });
+  }).finally(_=> toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(addCardPopup);
 }
@@ -161,11 +164,22 @@ function profileImageHandler(e) {
 
 function imageEditHandler(e) {
   e.preventDefault();
+  toggleSubmitButton(profileEditForm, true);
 
   api.setProfileImage(profileImageUrlInput.value).then(data => {
-    debugger
     profileImage.style.backgroundImage = `url('${data.avatar}')`;
-  });
+  }).finally(_=> toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(profileImageEditPopup);
+}
+
+function toggleSubmitButton(form, inProcess) {
+  const btn = form.querySelector('button[type="submit"]');
+  if (!btn) return;
+
+  if (inProcess) {
+    btn.textContent = "Сохранение...";
+  } else {
+    btn.textContent = "Сохранить";
+  }
 }
