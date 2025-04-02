@@ -83,7 +83,10 @@ function profileEditHandler(e) {
       profileTitle.textContent = data.name;
       profileDescription.textContent = data.about;
     })
-    .finally((_) => toggleSubmitButton(profileEditForm, false));
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(profileEditPopup);
 }
@@ -106,7 +109,7 @@ function createCardHandler(e) {
         card.createCard(myId, data, removeCard, toggleLike, showImg)
       );
     })
-    .finally((_) => toggleSubmitButton(profileEditForm, false));
+    .finally(() => toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(addCardPopup);
 }
@@ -123,36 +126,46 @@ function showImg(cardImg, cardTitle) {
 }
 
 function initPage() {
-  Promise.all([api.getUserInfo(), api.getInitialCards()]).then((res) => {
-    myId = res[0]._id;
-    profileTitle.textContent = res[0].name;
-    profileDescription.textContent = res[0].about;
-    profileImage.style.backgroundImage = `url('${res[0].avatar}')`;
+  Promise.all([api.getUserInfo(), api.getInitialCards()])
+    .then(([userData, cards]) => {
+      myId = userData._id;
+      profileTitle.textContent = userData.name;
+      profileDescription.textContent = userData.about;
+      profileImage.style.backgroundImage = `url('${userData.avatar}')`;
 
-    res[1].forEach((el) => {
-      placesList.append(
-        card.createCard(myId, el, removeCard, toggleLike, showImg)
-      );
+      cards.forEach((el) => {
+        placesList.append(
+          card.createCard(myId, el, removeCard, toggleLike, showImg)
+        );
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 }
 
 function removeCard(thisCard, cardId) {
-  api.removeCard(cardId).then((res) => card.removeCard(thisCard));
+  api
+    .removeCard(cardId)
+    .then((res) => card.removeCard(thisCard))
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 function toggleLike(thisCard, cardData) {
-  if (cardData.likes.some((el) => el._id === myId)) {
-    return api.removeLike(cardData._id).then((res) => {
+  const likeMethod = cardData.likes.some((el) => el._id === myId)
+    ? api.removeLike
+    : api.addLike;
+
+  return likeMethod(cardData._id)
+    .then((res) => {
       card.setLike(thisCard, res, myId);
       return res;
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  } else {
-    return api.addLike(cardData._id).then((res) => {
-      card.setLike(thisCard, res, myId);
-      return res;
-    });
-  }
 }
 
 function profileImageHandler(e) {
@@ -174,7 +187,10 @@ function imageEditHandler(e) {
     .then((data) => {
       profileImage.style.backgroundImage = `url('${data.avatar}')`;
     })
-    .finally((_) => toggleSubmitButton(profileEditForm, false));
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => toggleSubmitButton(profileEditForm, false));
 
   modal.closeModal(profileImageEditPopup);
 }
@@ -183,9 +199,5 @@ function toggleSubmitButton(form, inProcess) {
   const btn = form.querySelector('button[type="submit"]');
   if (!btn) return;
 
-  if (inProcess) {
-    btn.textContent = "Сохранение...";
-  } else {
-    btn.textContent = "Сохранить";
-  }
+  btn.textContent = inProcess ? "Сохранение..." : "Сохранить";
 }

@@ -20,7 +20,11 @@ export function createCard(myId, cardData, removeCard, toggleLike, showImg) {
   }
 
   cardLikeBtn.addEventListener("click", () =>
-    toggleLike(card, cardData).then((res) => (cardData = res))
+    toggleLike(card, cardData)
+      .then((res) => (cardData = res))
+      .catch((err) => {
+        console.log(err);
+      })
   );
   showImg(cardImg, cardTitle);
 
@@ -38,9 +42,8 @@ export function setLike(card, cardData, myId) {
 
   cardCountElement.textContent = cardData.likes.length;
 
-  if (cardData.likes.some((el) => el._id === myId)) {
-    cardLikeBtn.classList.add("card__like-button_is-active");
-  } else {
-    cardLikeBtn.classList.remove("card__like-button_is-active");
-  }
+  cardLikeBtn.classList.toggle(
+    "card__like-button_is-active",
+    cardData.likes.some((el) => el._id === myId)
+  );
 }

@@ -62,14 +62,12 @@ export function setProfileImage(avatar) {
 }
 
 function tryFetch(url, method, headers, data) {
-  return fetch(url, { method, headers, body: JSON.stringify(data) })
-    .then((res) => {
+  return fetch(url, { method, headers, body: JSON.stringify(data) }).then(
+    (res) => {
       if (res.ok) {
         return res.json();
       }
       return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    }
+  );
 }
