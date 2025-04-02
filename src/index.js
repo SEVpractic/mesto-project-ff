@@ -7,6 +7,7 @@ import * as api from "./components/api";
 
 const placesList = document.querySelector(".places__list");
 
+const profileImage = document.querySelector(".profile__image");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const profileEditPopup = document.querySelector(".popup_type_edit");
@@ -31,6 +32,13 @@ const cardUrlInput = cardCreateForm.querySelector(".popup__input_type_url");
 const cardImgPopup = document.querySelector(".popup_type_image");
 const cardImgPopupImage = cardImgPopup.querySelector(".popup__image");
 const cardImgPopupCaption = cardImgPopup.querySelector(".popup__caption");
+const profileImageEditPopup = document.querySelector(".popup_type_image-edit");
+const profileImageEditForm = document.querySelector(
+  '.popup__form[name="image-edit"]'
+);
+const profileImageUrlInput = profileImageEditForm.querySelector(
+  ".popup__input_type_url"
+);
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -50,6 +58,9 @@ profileEditForm.addEventListener("submit", profileEditHandler);
 
 addCardBtn.addEventListener("click", createCardOpenHandler);
 cardCreateForm.addEventListener("submit", createCardHandler);
+
+profileImage.addEventListener("click", profileImageHandler);
+profileImageEditForm.addEventListener("submit", imageEditHandler);
 
 validation.enableValidation(validationConfig);
 
@@ -110,6 +121,7 @@ function initPage() {
     myId = res[0]._id;
     profileTitle.textContent = res[0].name;
     profileDescription.textContent = res[0].about;
+    profileImage.style.backgroundImage = `url('${res[0].avatar}')`;
 
     res[1].forEach((el) => {
       placesList.append(
@@ -135,4 +147,25 @@ function toggleLike(thisCard, cardData) {
       return res;
     });
   }
+}
+
+function profileImageHandler(e) {
+  profileImageEditForm.reset();
+
+  const image = getComputedStyle(profileImage).backgroundImage;
+  profileImageUrlInput.value = image.replace(/url\(["']?(.*?)["']?\)/, '$1');
+
+  validation.clearValidation(profileImageEditForm, validationConfig);
+  modal.openModal(profileImageEditPopup);
+}
+
+function imageEditHandler(e) {
+  e.preventDefault();
+
+  api.setProfileImage(profileImageUrlInput.value).then(data => {
+    debugger
+    profileImage.style.backgroundImage = `url('${data.avatar}')`;
+  });
+
+  modal.closeModal(profileImageEditPopup);
 }

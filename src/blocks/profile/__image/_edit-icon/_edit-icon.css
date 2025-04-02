@@ -1,0 +1,14 @@
+.profile__image_edit-icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  block-size: 26px;
+  inline-size: 26px;
+  opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.profile__image:hover .profile__image_edit-icon {
+  opacity: 1;
+}

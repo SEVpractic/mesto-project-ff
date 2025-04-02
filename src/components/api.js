@@ -56,6 +56,15 @@ export function removeLike(cardId) {
   );
 }
 
+export function setProfileImage(avatar) {
+  return tryFetch(
+    `${config.baseUrl}/users/me/avatar`, 
+    'PATCH', 
+    config.headers,
+    { avatar }
+  );
+}
+
 function tryFetch(url, method, headers, data) {
   return fetch(url, { method, headers, body: JSON.stringify(data) })
   .then(res => {
